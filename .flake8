@@ -1,0 +1,10 @@
+[flake8]
+ignore =
+    # E501: line too long
+    E501,
+exclude=*.pyi
+max-complexity = 8
+max-line-length = 120
+per-file-ignores =
+    app/tests/services/v1/test_*.py:F811
+    app/tests/services/test_*.py:F811

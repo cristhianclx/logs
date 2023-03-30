@@ -1,0 +1,12 @@
+[run]
+omit =
+    */.local/*
+    */src/*
+    /usr/*
+    venv/*
+
+[report]
+exclude_lines =
+    raise NotImplementedError
+fail_under = 90
+show_missing = True

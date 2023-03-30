@@ -1,0 +1,11 @@
+global:
+  scrape_interval: 10s
+  evaluation_interval: 10s
+
+scrape_configs:
+  - job_name: "monitor"
+    static_configs:
+      - targets: ["localhost:9090"]
+  - job_name: "logs"
+    static_configs:
+      - targets: ["logs:9497"]

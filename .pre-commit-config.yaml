@@ -1,0 +1,68 @@
+default_language_version:
+  python: python3
+repos:
+- repo: https://github.com/pre-commit/pre-commit-hooks
+  rev: v4.2.0
+  hooks:
+    - id: check-json
+      exclude: |
+        (?x)^(
+          static/|
+          venv/|
+          infrastructure/
+        )
+- repo: https://github.com/pre-commit/pre-commit-hooks
+  rev: v4.2.0
+  hooks:
+    - id: check-yaml
+      exclude: |
+        (?x)^(
+          static/|
+          venv/
+        )
+- repo: https://github.com/pre-commit/pre-commit-hooks
+  rev: v4.2.0
+  hooks:
+    - id: debug-statements
+      exclude: ^venv/
+- repo: https://github.com/pre-commit/pre-commit-hooks
+  rev: v4.2.0
+  hooks:
+    - id: end-of-file-fixer
+      exclude: |
+        (?x)^(
+          static/|
+          venv/
+        )
+- repo: https://github.com/pre-commit/pre-commit-hooks
+  rev: v4.2.0
+  hooks:
+    - id: requirements-txt-fixer
+      exclude: ^venv/
+- repo: https://github.com/pre-commit/pre-commit-hooks
+  rev: v4.2.0
+  hooks:
+    - id: trailing-whitespace
+      exclude: |
+        (?x)^(
+          static/|
+          venv/
+        )
+- repo: https://github.com/psf/black
+  rev: 23.1.0
+  hooks:
+    - id: black
+      args: [--line-length=120]
+      exclude: ^venv/
+- repo: https://github.com/PyCQA/autoflake
+  rev: v2.0.2
+  hooks:
+    - id: autoflake
+      args: [--in-place, --remove-unused-variables, --remove-all-unused-imports, -r]
+      exclude: ^venv/
+- repo: https://github.com/pycqa/isort
+  rev: 5.12.0
+  hooks:
+    - id: isort
+      args: [--profile=black]
+      exclude: ^venv/

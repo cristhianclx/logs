@@ -1,0 +1,218 @@
+To run:
+
+    docker-compose up
+
+    8080: immudb
+    3322: immudb
+    8000: web
+    9090: prometheus
+    3000: grafana
+    
+To debug only run:
+
+    docker-compose run --service-ports code
+
+To review docs:
+
+    http://127.0.0.1:8000/docs
+
+To do some simple calls (with httpie):
+
+    # ping
+
+    http GET 127.0.0.1:8000/ping/
+
+    # users - create
+
+    http POST 127.0.0.1:8000/v1/users/ \
+      first_name="Cristhian" \
+      last_name="Cueva" \
+      email="cristhianclx@gmail.com" \
+      password=123456
+
+      {
+        ...
+        "login": {
+          "token": eyJhbGciOiJIUzI1NiI...Rj5BKs054D_aNY
+        },
+      }
+
+    # users - login
+
+    http POST 127.0.0.1:8000/v1/users/login/ \
+      email="cristhianclx@gmail.com" \
+      password=123456 \
+      type="read-write"
+
+      {
+        "login": {
+          "token": "eyJhbGciOiJIUzI1NiI...Rj5BKs054D_aNY"
+        }
+      }
+
+    # buckets - create
+
+    http POST 127.0.0.1:8000/v1/buckets/ \
+      name="logs.demo.pe" \
+      "Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJjcmlzdGhpYW5jbHhAZ21haWwuY29tIiwidHlwZSI6InJlYWQtd3JpdGUiLCJleHAiOjE2ODAwNzY3MTF9.FLkKpDV0o0AK8KcL78K8OPQiSphg2shNVi4neW0wZjw"
+
+      {
+        "created_at": "2023-03-29T07:21:16.431626",
+        "updated_at": "2023-03-29T07:21:16.431626",
+        "user_email": "cristhianclx@gmail.com",
+        "name": "logs.demo.pe"
+      }
+
+    # buckets - list
+
+    http GET 127.0.0.1:8000/v1/buckets/ \
+      "Authorization: Bearer eyJhbGciOiJIUzI1NiI...Rj5BKs054D_aNY"
+
+      [
+        {
+          "created_at": "2023-03-29T07:21:16.431626",
+          "updated_at": "2023-03-29T07:21:16.431626",
+          "user_email": "cristhianclx@gmail.com",
+        "name": "logs.demo.pe"
+        }
+      ]
+
+    # logs - create batch
+
+    http POST 127.0.0.1:8000/v1/logs/logs.demo.pe/ \
+      [0][source]=app [0][data]:='{"key": "value"}' \
+      [1][source]=web [1][data]:='{"key": "value"}' \
+      "Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJjcmlzdGhpYW5jbHhAZ21haWwuY29tIiwidHlwZSI6InJlYWQtd3JpdGUiLCJleHAiOjE2ODAwNzY3MTF9.FLkKpDV0o0AK8KcL78K8OPQiSphg2shNVi4neW0wZjw"
+
+      [
+        {
+          "bucket": "logs.demo.pe",
+          "data": {
+              "key": "value"
+          },
+          "email": "cristhianclx@gmail.com",
+          "id": 7,
+          "source": "app",
+          "verified": true
+        },
+        {
+          "bucket": "logs.demo.pe",
+          "data": {
+            "key": "value"
+          },
+          "email": "cristhianclx@gmail.com",
+          "id": 8,
+          "source": "web",
+          "verified": true
+        }
+      ]
+
+    # logs - all
+
+    http GET 127.0.0.1:8000/v1/logs/ \
+      "Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJjcmlzdGhpYW5jbHhAZ21haWwuY29tIiwidHlwZSI6InJlYWQtd3JpdGUiLCJleHAiOjE2ODAwNzY3MTF9.FLkKpDV0o0AK8KcL78K8OPQiSphg2shNVi4neW0wZjw"
+
+      [
+        {
+          "bucket": "logs.demo.pe",
+          "data": {
+              "key": "value"
+          },
+          "email": "cristhianclx@gmail.com",
+          "id": 7,
+          "source": "app",
+          "verified": true
+        },
+        {
+          "bucket": "logs.demo.pe",
+          "data": {
+            "key": "value"
+          },
+          "email": "cristhianclx@gmail.com",
+          "id": 8,
+          "source": "web",
+          "verified": true
+        }
+      ]
+
+    # logs - all in a bucket
+
+    http GET 127.0.0.1:8000/v1/logs/logs.demo.pe/ \
+      "Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJjcmlzdGhpYW5jbHhAZ21haWwuY29tIiwidHlwZSI6InJlYWQtd3JpdGUiLCJleHAiOjE2ODAwNzY3MTF9.FLkKpDV0o0AK8KcL78K8OPQiSphg2shNVi4neW0wZjw"
+
+      [
+        {
+          "bucket": "logs.demo.pe",
+          "data": {
+              "key": "value"
+          },
+          "email": "cristhianclx@gmail.com",
+          "id": 7,
+          "source": "app",
+          "verified": true
+        },
+        {
+          "bucket": "logs.demo.pe",
+          "data": {
+            "key": "value"
+          },
+          "email": "cristhianclx@gmail.com",
+          "id": 8,
+          "source": "web",
+          "verified": true
+        }
+      ]
+
+    # logs - last x
+
+    http GET "127.0.0.1:8000/v1/logs/?page_size=1&order_by=desc" \
+      "Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJjcmlzdGhpYW5jbHhAZ21haWwuY29tIiwidHlwZSI6InJlYWQtd3JpdGUiLCJleHAiOjE2ODAwNzY3MTF9.FLkKpDV0o0AK8KcL78K8OPQiSphg2shNVi4neW0wZjw"
+
+      [
+        {
+          "bucket": "logs.demo.pe",
+          "data": {
+            "key": "value"
+          },
+          "email": "cristhianclx@gmail.com",
+          "id": 8,
+          "source": "web",
+          "verified": true
+        }
+      ]
+
+    # logs - last x in a bucket
+
+    http GET "127.0.0.1:8000/v1/logs/logs.demo.pe/?page_size=1&order_by=desc" \
+      "Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJjcmlzdGhpYW5jbHhAZ21haWwuY29tIiwidHlwZSI6InJlYWQtd3JpdGUiLCJleHAiOjE2ODAwNzY3MTF9.FLkKpDV0o0AK8KcL78K8OPQiSphg2shNVi4neW0wZjw"
+
+      [
+        {
+          "bucket": "logs.demo.pe",
+          "data": {
+            "key": "value"
+          },
+          "email": "cristhianclx@gmail.com",
+          "id": 8,
+          "source": "web",
+          "verified": true
+        }
+      ]
+
+    # logs - number of stored logs
+
+    http GET 127.0.0.1:8000/v1/logs/stats/ \
+      "Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJjcmlzdGhpYW5jbHhAZ21haWwuY29tIiwidHlwZSI6InJlYWQtd3JpdGUiLCJleHAiOjE2ODAwNzY3MTF9.FLkKpDV0o0AK8KcL78K8OPQiSphg2shNVi4neW0wZjw"
+
+      {
+        "n": 4,
+      }
+
+    # logs - number of stored logs in a bucket
+
+    http GET 127.0.0.1:8000/v1/logs/logs.demo.pe/stats/ \
+      "Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJjcmlzdGhpYW5jbHhAZ21haWwuY29tIiwidHlwZSI6InJlYWQtd3JpdGUiLCJleHAiOjE2ODAwNzY3MTF9.FLkKpDV0o0AK8KcL78K8OPQiSphg2shNVi4neW0wZjw"
+
+      {
+        "n": 4,
+      }

@@ -1,0 +1,32 @@
+[
+  {
+    "image": "${service_image}",
+    "cpu": ${service_cpu},
+    "memory": ${service_memory},
+    "name": "${name}-service",
+    "command": [ "/bin/bash", "-c", "${service_run}" ],
+    "networkMode": "awsvpc",
+    "logConfiguration": {
+      "logDriver": "awslogs",
+      "options": {
+        "awslogs-create-group": "true",
+        "awslogs-group" : "/ecs/${logs_name}/service",
+        "awslogs-region": "${logs_region}",
+        "awslogs-stream-prefix": "ecs"
+      }
+    },
+    "portMappings": [
+      {
+        "protocol": "tcp",
+        "containerPort": ${service_port},
+        "hostPort": ${service_port}
+      }
+    ],
+    "environment": [
+      {
+        "name": "PORT",
+        "value": "${service_port}"
+      }
+    ]
+  }
+]

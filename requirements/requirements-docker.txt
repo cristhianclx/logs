@@ -1,0 +1,16 @@
+-r requirements.txt
+
+autoflake==2.0.2
+black==23.1.0
+Faker
+flake8
+httpie
+ipdb
+ipython
+isort[colors]==5.12.0
+mypy
+pre-commit
+pylint
+pytest
+pytest-cov
+types-redis

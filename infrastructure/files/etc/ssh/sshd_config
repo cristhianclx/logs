@@ -1,0 +1,10 @@
+# ssh
+Port 22
+LoginGraceTime 120
+PermitRootLogin no
+ChallengeResponseAuthentication no
+UsePAM yes
+X11Forwarding yes
+AcceptEnv LANG LC_*
+ClientAliveInterval 120
+PasswordAuthentication no

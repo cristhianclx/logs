@@ -1,0 +1,7 @@
+apiVersion: 1
+
+providers:
+  - name: 'Visualizer'
+    folder: 'Services'
+    options:
+      path: /etc/grafana/provisioning/dashboards

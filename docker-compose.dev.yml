@@ -1,0 +1,50 @@
+version: '3.8'
+services:
+  code-bash:
+    build: .
+    command: /bin/bash -c "/code/scripts/certs.sh &&
+                           /code/scripts/wait/tcp.sh data 5432 &&
+                           /code/scripts/wait/tcp.sh logs 3322 &&
+                           /code/scripts/settings/docker.sh &&
+                           /code/scripts/venv.sh &&
+                           /code/scripts/migrate.sh &&
+                           /code/scripts/seed.sh &&
+                           /bin/bash"
+    environment:
+      - PORT=8000
+    ports:
+      - "8000:8000"
+    volumes:
+      - .:/code
+    depends_on:
+      - data
+      - cache
+      - logs
+    links:
+      - data
+      - cache
+      - logs
+  code-test:
+    build: .
+    command: /bin/bash -c "/code/scripts/certs.sh &&
+                           /code/scripts/wait/tcp.sh data 5432 &&
+                           /code/scripts/wait/tcp.sh logs 3322 &&
+                           /code/scripts/settings/docker.sh &&
+                           /code/scripts/venv.sh &&
+                           /code/scripts/migrate.sh &&
+                           /code/scripts/seed.sh &&
+                           /code/scripts/test.sh"
+    environment:
+      - PORT=8000
+    ports:
+      - "8000:8000"
+    volumes:
+      - .:/code
+    depends_on:
+      - data
+      - cache
+      - logs
+    links:
+      - data
+      - cache
+      - logs

@@ -1,0 +1,79 @@
+version: '3.8'
+services:
+  data:
+    container_name: data
+    image: postgres:15.2
+    environment:
+      POSTGRES_DB: bbdd
+      POSTGRES_USER: api
+      POSTGRES_PASSWORD: password
+    volumes:
+      - data:/var/lib/postgresql/data/
+    restart: always
+  cache:
+    container_name: cache
+    image: redis:7.0
+  logs:
+    container_name: logs
+    image: "codenotary/immudb:1.4.1"
+    command: "--signingKey /opt/certs/private.pem"
+    ports:
+      - "3322:3322"
+      - "8080:8080"
+    volumes:
+      - ./certs/:/opt/certs/
+      - logs:/var/lib/immudb/
+    restart: always
+  code:
+    build: .
+    command: /bin/bash -c "/code/scripts/certs.sh &&
+                           /code/scripts/wait/tcp.sh data 5432 &&
+                           /code/scripts/wait/tcp.sh logs 3322 &&
+                           /code/scripts/settings/docker.sh &&
+                           /code/scripts/venv.sh &&
+                           /code/scripts/migrate.sh &&
+                           /code/scripts/seed.sh &&
+                           /code/scripts/run.sh"
+    environment:
+      - PORT=8000
+    ports:
+      - "8000:8000"
+    volumes:
+      - .:/code
+    depends_on:
+      - data
+      - cache
+      - logs
+    links:
+      - data
+      - cache
+      - logs
+  monitor:
+    container_name: monitor
+    image: prom/prometheus
+    command: "--config.file=/etc/prometheus/prometheus.yml --web.console.libraries=/usr/share/prometheus/console_libraries --web.console.templates=/usr/share/prometheus/consoles"
+    ports:
+      - "9090:9090"
+    volumes:
+      - ./etc/prometheus/:/etc/prometheus/
+    restart: always
+    depends_on:
+      - logs
+    links:
+      - logs
+  visualizer:
+    container_name: visualizer
+    image: grafana/grafana-oss
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./etc/grafana/datasources/:/etc/grafana/provisioning/datasources/
+      - ./etc/grafana/dashboards/:/etc/grafana/provisioning/dashboards/
+    restart: always
+    depends_on:
+      - monitor
+    links:
+      - monitor
+volumes:
+  data: {}
+  logs: {}

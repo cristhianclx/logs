@@ -1,0 +1,7 @@
+apiVersion: 1
+
+datasources:
+  - name: Monitor
+    type: prometheus
+    access: server
+    url: http://monitor:9090
