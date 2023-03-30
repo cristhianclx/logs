@@ -39,7 +39,6 @@ def upgrade():
     for table in Base.metadata.tables.values():
         sql = str(sa.schema.CreateTable(table).compile(dialect=sa.dialects.postgresql.dialect()))
         sql = replace(sql)
-        import ipdb; ipdb.set_trace()
         database.connection.sqlExec(sql)
     database.connection.logout()
     # ### end Alembic commands ###

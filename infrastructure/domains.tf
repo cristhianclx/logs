@@ -17,4 +17,3 @@ resource "aws_route53_record" "logs" {
   records = [aws_eip.logs.public_ip]
   zone_id = data.aws_route53_zone.main.zone_id
 }
-

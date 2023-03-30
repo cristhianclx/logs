@@ -7,7 +7,7 @@ To run:
     8000: web
     9090: prometheus
     3000: grafana
-    
+
 To debug only run:
 
     docker-compose run --service-ports code
