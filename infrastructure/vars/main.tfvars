@@ -17,15 +17,15 @@ cache_redis_version = "7.0"
 cache_redis_size    = "cache.t3.micro"
 cache_redis_port    = 6379
 
-logs = "store.logs.demo.pe"
-logs_image_name  = "debian-11-amd64-*"
-logs_image_owner = "679593333241"
+logs                    = "store.logs.demo.pe"
+logs_image_name         = "debian-11-amd64-*"
+logs_image_owner        = "679593333241"
 logs_instance_size      = "t3.small"
 logs_instance_disk_size = 50
-logs_instance_user = "cristhian"
+logs_instance_user      = "cristhian"
 
-grafana = "grafana.logs.demo.pe"
-grafana_image_id = "ami-070802b0ef8efdff7"
+grafana                    = "grafana.logs.demo.pe"
+grafana_image_id           = "ami-070802b0ef8efdff7"
 grafana_instance_size      = "t3.small"
 grafana_instance_disk_size = 50
 
